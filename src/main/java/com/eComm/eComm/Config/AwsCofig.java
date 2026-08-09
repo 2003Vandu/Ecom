@@ -22,7 +22,7 @@ public class AwsCofig
     private String region;
 
     @Bean(name = "awsS3Client")
-    @Primary// default clint for aws
+    @Primary// default clint for AWS
     public S3Client s3Client(){
 
         return S3Client.builder()
