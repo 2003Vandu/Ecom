@@ -25,12 +25,22 @@ public class ItemEntity
     @Column(unique = true)
     private String itemId;
 
-
     private String name;
-
     private BigDecimal price;
-
     private String description;
+
+    // ✅ NEW: Add stock/inventory fields
+    @Column(nullable = false)//4/19/2026
+    @Builder.Default
+    private Integer stockQuantity = 0; // Current available stock
+
+    @Column(nullable = false)//4/19/2026
+    @Builder.Default
+    private Integer lowStockThreshold = 10; // Alert when stock is low
+
+    @Column(nullable = false)//4/19/2026
+    @Builder.Default
+    private Boolean inStock = true; // Quick check if item is available
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -45,5 +55,11 @@ public class ItemEntity
     @JoinColumn(name = "category_id", nullable = false)
     @OnDelete(action = OnDeleteAction.RESTRICT)
     private CategoryEntity category;
+
+    // ✅ Helper method to update stock status
+    @PreUpdate
+    public void updateStockStatus() {//4/19/2026
+        this.inStock = this.stockQuantity > 0;
+    }
 
 }
