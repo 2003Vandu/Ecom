@@ -1,4 +1,4 @@
-package com.eComm.eComm.controller;
+package com.eComm.eComm.Controller;
 
 import com.eComm.eComm.Service.ItemService;
 import com.eComm.eComm.io.ItemRequest;

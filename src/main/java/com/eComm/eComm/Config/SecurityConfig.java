@@ -1,7 +1,7 @@
 package com.eComm.eComm.Config;
 
 import com.eComm.eComm.Filters.JwtRequestFilter;
-import com.eComm.eComm.Service.implementation.AppUserDetailsService;
+import com.eComm.eComm.Service.Implementation.AppUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -60,7 +60,8 @@ public class SecurityConfig {
 
     private UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedOrigins(List.of("http://localhost:5173",
+                "https://pos-billing-soft.netlify.app"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
        // config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.addAllowedHeader("*");

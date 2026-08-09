@@ -10,8 +10,7 @@ public class ECommApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ECommApplication.class, args);
-        System.out.println("Ecom Backend.. ");
+        System.out.println("pos billing System  Backend.. ");
 	}
 
 }
-//10:55:15

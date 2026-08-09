@@ -1,9 +1,9 @@
-package com.eComm.eComm.Service.implementation;
+package com.eComm.eComm.Service.Implementation;
 
 import com.eComm.eComm.Repository.CategoryRepository;
 import com.eComm.eComm.Repository.ItemRepository;
 import com.eComm.eComm.Service.CategoryService;
-import com.eComm.eComm.entity.CategoryEntity;
+import com.eComm.eComm.Entity.CategoryEntity;
 import com.eComm.eComm.io.CategoryRequest;
 import com.eComm.eComm.io.CategoryResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class categoryServiceimpl implements CategoryService
 
     private final ItemRepository itemRepository;
 
-    private final com.eComm.eComm.Service.implementation.FileUploadServiceImpl fileUploadService;
+    private final com.eComm.eComm.Service.Implementation.FileUploadServiceImpl fileUploadService;
 
     // create category
     @Override

@@ -1,0 +1,60 @@
+1. What we used (The Tech Stack)
+Spring Boot 3.x: For rapid application development with auto-configuration.
+
+Spring Security: To implement Role-Based Access Control (RBAC).
+
+MockMvc: To simulate HTTP requests (GET, POST, DELETE) without starting a real server,
+allowing for faster testing of the web layer.
+
+Lombok: Specifically @Data, @Builder, and @RequiredArgsConstructor to reduce boilerplate code in DTOs and Controllers.
+Jackson (ObjectMapper): For serializing Java objects to JSON and vice-versa, specifically
+handling complex @RequestPart multipart data.
+
+2. What we did (The Testing Strategy)
+Integration Testing: We loaded the ApplicationContext using @SpringBootTest to verify that our Security filters, Controllers, and Service mocks work together.
+Service Mocking: We used @MockBean to isolate the Controller from the database. This allowed us to focus on testing API contracts
+and security rules without needing real DB connections.
+Multipart/Form-Data Handling: We successfully tested endpoints that accept both JSON data and physical files (like product images)
+using MockMultipartFile.
+Negative Testing: We didn't just test success; we verified that a USER receives a 403 Forbidden when attempting ADMIN actions.
+
+3. Likely Interview Questions
+Question 	Recommended Answer
+
+Why use @SpringBootTest instead of a plain Unit Test?
+"I used @SpringBootTest because it loads the security context. A simple unit test would miss the Role-Based Access Control logic defined in my SecurityConfig."
+
+What is the difference between @Mock and @MockBean?
+"@Mock is for standard Mockito tests. @MockBean is a Spring-specific annotation that replaces a real bean in the Spring Application Context with a mock."
+How did you handle security testing?
+"I used @WithMockUser(roles = "ADMIN") to simulate different authorities and verified the response status codes using MockMvc's andExpect(status().isForbidden())
+for unauthorised access."
+
+How do you test a method that returns void?
+"For void methods like my delete operations, I use Mockito's doNothing() or doThrow() to verify the behavior when the service is called."
+
+Why did you use @RequestPart instead of @RequestParam for files?
+"@RequestPart is better for multi-part requests where you are sending both a complex JSON object (like ItemRequest) and a file simultaneously."
+
+Key Tip: If an interviewer asks why your code coverage report didn't show the ItemController, mention that coverage tools require the test name to
+         follow naming conventions (like ending in Test) and that you've verified the tests run successfully in the console
+
+
+To explain the JwtRequestFilter in an interview, you should describe it as the "Security Guard" of your application. It sits in front of your Controllers and checks every request for a valid "ID card" (the JWT).
+Based on the code in your PDF (Pages 16-17), here is the step-by-step flow you should explain:
+1. The "Once Per Request" Rule
+What to say: "I implemented JwtRequestFilter by extending OncePerRequestFilter. This ensures that the security logic only runs once for every HTTP request, preventing redundant processing." (pp. 16-17)
+2. The Step-by-Step Security Flow
+When an interviewer asks how it works, explain these 4 steps:
+Extract the Header: The filter looks for the Authorization header. It specifically checks if it starts with the string "Bearer " followed by the token. (p. 17)
+Validate the Token: Using my JwtUtil class, the filter extracts the Email (Username) from the token and checks if the token has expired. (pp. 17-18)
+Load User Details: If the token is valid and the user is not yet authenticated in the current session, it calls AppUserDetailsService to fetch the user's data and Roles (like ADMIN or USER) from the database. (pp. 17, 20)
+Set Security Context: Finally, it creates a UsernamePasswordAuthenticationToken and stores it in the SecurityContextHolder. This tells Spring Security: "This user is verified; let them pass to the Controller." (p. 17)
+3. Why is this important for a POS?
+What to say: "In a POS system, security is critical. By using JWT, we keep the backend Stateless. We don't need to store sessions on the server, which makes the system faster and more scalable for multiple cashiers or stores." (p. 15)
+Interview "Pro-Tip" Questions & Answers:
+Q: What happens if the token is invalid?
+A: "The filter simply fails to set the authentication in the SecurityContextHolder. Later, the SecurityFilterChain will see there is no authenticated user and return a 401 Unauthorized or 403 Forbidden based on the URL's requirements." (pp. 15, 17)
+Q: Why do you check SecurityContextHolder.getContext().getAuthentication() == null?
+A: "This prevents re-authenticating a user who is already authenticated for the current request, which saves processing time." (p. 17)
+Would you like me to summarize the SecurityConfig (Page 15) so you can explain how the filter is actually "plugged in" to the system?

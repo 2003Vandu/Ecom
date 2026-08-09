@@ -1,4 +1,4 @@
-package com.eComm.eComm.entity;
+package com.eComm.eComm.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;

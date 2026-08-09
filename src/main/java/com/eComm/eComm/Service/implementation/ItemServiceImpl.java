@@ -1,10 +1,10 @@
-package com.eComm.eComm.Service.implementation;
+package com.eComm.eComm.Service.Implementation;
 
+import com.eComm.eComm.Entity.CategoryEntity;
+import com.eComm.eComm.Entity.ItemEntity;
 import com.eComm.eComm.Repository.CategoryRepository;
 import com.eComm.eComm.Repository.ItemRepository;
 import com.eComm.eComm.Service.ItemService;
-import com.eComm.eComm.entity.CategoryEntity;
-import com.eComm.eComm.entity.ItemEntity;
 import com.eComm.eComm.io.ItemRequest;
 import com.eComm.eComm.io.ItemResponse;
 import lombok.RequiredArgsConstructor;

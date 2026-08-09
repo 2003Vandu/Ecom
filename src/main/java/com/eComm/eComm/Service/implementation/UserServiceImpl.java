@@ -1,8 +1,8 @@
-package com.eComm.eComm.Service.implementation;
+package com.eComm.eComm.Service.Implementation;
 
 import com.eComm.eComm.Repository.UserRepository;
 import com.eComm.eComm.Service.UserService;
-import com.eComm.eComm.entity.UserEntity;
+import com.eComm.eComm.Entity.UserEntity;
 import com.eComm.eComm.io.UserRequest;
 import com.eComm.eComm.io.UserResponse;
 import lombok.RequiredArgsConstructor;

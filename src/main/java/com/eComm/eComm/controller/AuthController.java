@@ -1,7 +1,7 @@
-package com.eComm.eComm.controller;
+package com.eComm.eComm.Controller;
 
 import com.eComm.eComm.Service.UserService;
-import com.eComm.eComm.Service.implementation.AppUserDetailsService;
+import com.eComm.eComm.Service.Implementation.AppUserDetailsService;
 import com.eComm.eComm.Utils.JwtUtil;
 import com.eComm.eComm.io.AuthRequest;
 import com.eComm.eComm.io.AuthResponse;
