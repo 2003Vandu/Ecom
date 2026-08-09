@@ -3,6 +3,7 @@ package com.eComm.eComm.Config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
@@ -20,7 +21,8 @@ public class AwsCofig
     @Value("${aws.region}")
     private String region;
 
-    @Bean
+    @Bean(name = "awsS3Client")
+    @Primary// default clint for aws
     public S3Client s3Client(){
 
         return S3Client.builder()
