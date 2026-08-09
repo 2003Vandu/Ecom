@@ -1,5 +1,6 @@
 # 🌐 POS Billing System (Point Of Sale)
-#  [![Live Frontend](https://img.shields.io/badge/LIVE-Frontend-B?style=for-the-badge)](https://pos-billing-soft.netlify.app) [![Live Demo](https://img.shields.io/badge/LIVE-Swagger_APIs-blue?style=for-the-badge)](http://localhost:8080/api/v1.0/swagger-ui/index.html)
+#  [![Live Frontend](https://img.shields.io/badge/LIVE-Frontend-B?style=for-the-badge)](https://pos-billing-soft.netlify.app) 
+[![Live Demo](https://img.shields.io/badge/LIVE-Swagger_APIs-blue?style=for-the-badge)](https://ecom-7gon.onrender.com/api/v1.0/swagger-ui/index.html)
 
 
 
