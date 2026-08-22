@@ -14,7 +14,183 @@ A professional-grade point-of-sale and billing web application. This project fea
 * **Database:** **MySQL** for **ACID compliance** and strict data integrity for financial transactions and inventory management.
 * **Cloud:** AWS SDK for S3 bucket management.
 * **Payments:** Razorpay Java SDK for order creation and signature verification.
+<div align="center">
 
+<pre style="max-height: 300px; overflow: auto; background-color: #0d1117; padding: 10px; border-radius: 6px; text-align: left; display: inline-block;">
++-----------------------------------------------------------------------------------+
+|                                  CLIENT LAYER                                     |
+|                      Frontend Client (React.js / Web / Mobile)                     |
++-----------------------------------------------------------------------------------+
+                                         |
+                                         | HTTP / HTTPS Requests
+                                         v
++-----------------------------------------------------------------------------------+
+|                                SECURITY & FILTER LAYER                            |
+|                                                                                   |
+|  +-----------------------------------+    +------------------------------------+  |
+|  |           SecurityConfig          |    |           JwtRequestFilter         |  |
+|  |  - Stateless Session Policy       |    |  - Intercepts "Authorization"      |  |
+|  |  - CORS & Endpoint Authorization  |    |  - Validates JWT Bearer Token       |  |
+|  +-----------------------------------+    +------------------------------------+  |
++-----------------------------------------------------------------------------------+
+                                         |
+                                         | Authenticated Request
+                                         v
++-----------------------------------------------------------------------------------+
+|                                CONTROLLER / API LAYER                             |
+|                                                                                   |
+|  +----------------+   +-------------------+   +----------------+   +-----------+  |
+|  | AuthController |   |  UserController   |   | ItemController |   | Category  |  |
+|  |  /login        |   |  /admin/register  |   |  /admin/items  |   | Controller|  |
+|  |  /encode       |   |  /admin/users     |   |  /items        |   | /categories|  |
+|  +----------------+   +-------------------+   +----------------+   +-----------+  |
+|            |                   |                      |                  |        |
+|  +----------------+   +-------------------+                                       |
+|  | OrderController|   | PaymentController |   +--------------------+              |
+|  |  /orders       |   |  /payments        |   | DashbordController |              |
+|  |  /orders/latest|   |  /create-order    |   |  /dashboard        |              |
+|  +----------------+   +-------------------+   +--------------------+              |
++-----------------------------------------------------------------------------------+
+                                         |
+                                         | DTOs (UserRequest, ItemRequest, etc.)
+                                         v
++-----------------------------------------------------------------------------------+
+|                            SERVICE / BUSINESS LOGIC LAYER                         |
+|                                                                                   |
+|  +---------------------------+  +--------------------------+  +----------------+  |
+|  |    UserServiceImpl        |  |     ItemServiceImpl      |  | CategoryService|  |
+|  | - Encodes Passwords       |  | - CRUD Operations        |  |     Impl       |  |
+|  | - AppUserDetailsService   |  | - Manages Item Entities  |  | - Category CRUD|  |
+|  +---------------------------+  +--------------------------+  +----------------+  |
+|                |                             |                        |           |
+|  +---------------------------+               |               +----------------+  |
+|  |    OrderServiceImpl       |               |               | FileUpload     |  |
+|  | - Calculates Totals/Taxes |               |               | ServiceImpl    |  |
+|  | - Handles Order Status    |               |               | - S3 Upload    |  |
+|  +---------------------------+               |               +----------------+  |
+|                |                             |                        |           |
+|  +---------------------------+               v                        |           |
+|  |    RazorpayServiceImpl    |     +-------------------+              |           |
+|  | - Creates Razorpay Orders |     |      JwtUtil      |              |           |
+|  +---------------------------+     | - Token Gen/Val   |              |           |
+|                                    +-------------------+              |           |
++-----------------------------------------------------------------------------------+
+                   |                                                    |
+         JPA Entity Operations                                Amazon SDK Calls
+                   |                                                    |
+                   v                                                    v
++------------------------------------+                +-----------------------------+
+|          PERSISTENCE LAYER         |                |       EXTERNAL SERVICES     |
+|                                    |                |                             |
+|  +------------------------------+  |                |   +---------------------+   |
+|  |        Spring Data JPA       |  |                |   |     AWS S3 Bucket   |   |
+|  | - UserRepository             |  |                |   | - Image Asset Store |   |
+|  | - ItemRepository             |  |                |   +---------------------+   |
+|  | - CategoryRepository         |  |                |                             |
+|  | - OrderEntityRepository      |  |                |   +---------------------+   |
+|  | - OrderItemEntityRepository  |  |                |   |   Razorpay Gateway  |   |
+|  +------------------------------+  |                |   - Payment Processing  |   |
++------------------------------------+                |   +---------------------+   |
+                   |                                  +-----------------------------+
+                   v
++------------------------------------+
+|               DATABASE             |
+|                                    |
+|  +------------------------------+  |
+|  |     Relational DB (MySQL)    |  |
+|  | - tbl_users    - tbl_orders  |  |
+|  | - tbl_items    - tbl_category|  |
+|  +------------------------------+  |
++------------------------------------+
+</pre>
+</div>
+
+## Project Structure 
+<pre style="max-height: 300px; overflow: auto; background-color: #0d1117; padding: 10px; border-radius: 6px; text-align: left; display: inline-block;">
+eComm/
+├── src/
+│   └── main/
+│       └── java/
+│           └── com/eComm/eComm/
+│
+│               ├── Config/
+│               │   ├── AwsConfig.java
+│               │   ├── ConfigObjectMapper.java
+│               │   └── SecurityConfig.java
+│               │
+│               ├── controller/
+│               │   ├── AuthController.java
+│               │   ├── UserController.java
+│               │   ├── CategoryController.java
+│               │   ├── ItemController.java
+│               │   ├── OrderController.java
+│               │   ├── PaymentController.java
+│               │   └── DashboardController.java
+│               │
+│               ├── Service/
+│               │   ├── UserService.java
+│               │   ├── CategoryService.java
+│               │   ├── ItemService.java
+│               │   ├── OrderService.java
+│               │   ├── RazorpayService.java
+│               │   └── FileUploadService.java
+│               │
+│               ├── Service/implementation/
+│               │   ├── UserServiceImpl.java
+│               │   ├── CategoryServiceImpl.java
+│               │   ├── ItemServiceImpl.java
+│               │   ├── OrderServiceImpl.java
+│               │   ├── RazorpayServiceImpl.java
+│               │   ├── FileUploadServiceImpl.java
+│               │   └── AppUserDetailsService.java
+│               │
+│               ├── Repository/
+│               │   ├── UserRepository.java
+│               │   ├── CategoryRepository.java
+│               │   ├── ItemRepository.java
+│               │   ├── OrderEntityRepository.java
+│               │   └── OrderItemEntityRepository.java
+│               │
+│               ├── entity/
+│               │   ├── UserEntity.java
+│               │   ├── CategoryEntity.java
+│               │   ├── ItemEntity.java
+│               │   ├── OrderEntity.java
+│               │   └── OrderItemEntity.java
+│               │
+│               ├── io/
+│               │   ├── AuthRequest.java
+│               │   ├── AuthResponse.java
+│               │   ├── UserRequest.java
+│               │   ├── UserResponse.java
+│               │   ├── CategoryRequest.java
+│               │   ├── CategoryResponse.java
+│               │   ├── ItemRequest.java
+│               │   ├── ItemResponse.java
+│               │   ├── OrderRequest.java
+│               │   ├── OrderResponse.java
+│               │   ├── PaymentRequest.java
+│               │   ├── PaymentVerificationRequest.java
+│               │   ├── PaymentDetails.java
+│               │   ├── PaymentMethod.java
+│               │   ├── RazorpayOrderResponse.java
+│               │   └── DashboardResponse.java
+│               │
+│               ├── Filters/
+│               │   └── JwtRequestFilter.java
+│               │
+│               └── Utils/
+│                   └── JwtUtil.java
+│
+├── src/
+│   └── main/
+│       └── resources/
+│           └── application.properties
+│
+├── pom.xml
+├── README.md
+└── Documentation/
+</pre>
 ## 🗄️ Why MySQL over MongoDB?
 For this POS Billing system, I intentionally chose a **Relational Database (SQL)** over MongoDB for the following reasons:
 
