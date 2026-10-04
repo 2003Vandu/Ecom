@@ -21,14 +21,7 @@
 
 A **production-ready, enterprise-grade Point-of-Sale (POS) and billing system** built with modern technologies. This full-stack application demonstrates mastery of backend architecture, security best practices, and software engineering principles.
 
-### 🎯 Key Metrics
-- **127 automated tests** (55 unit + 61 integration + 6 security + 5 full-stack)
-- **2,534 lines of test code** ensuring reliability
-- **100% RBAC implementation** for security
-- **99.9% uptime** (production on Render)
-- **<500ms API response time** (average)
-- **ACID-compliant database** for financial transactions
-- **Zero data loss** - Transaction rollback on failures
+
 
 ---
 
